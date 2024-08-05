@@ -88,7 +88,7 @@ app.post('/newOrganization',(req,res)=>{
 app.post('/newEstrategie',(req,res)=>{
     const post__data = req.body;
     const tipo_estrategia = post__data.tipo_estrategia;
-    const descricao = post__data.descriao;
+    const descricao = post__data.descricao;
     const efetividade = post__data.efetividade;
 
     //Check if the data is empty.
@@ -121,8 +121,8 @@ app.post('/newEvent',(req,res)=>{
     const nome_evento = post__data.nome_evento;
     const data_evento = post__data.data_evento;
     const localizacao_evento = post__data.localizacao_evento;
-    const organizacao_id = post.data.organizacao_id;
-    const estrategia_id = post.data.estrategia_id;
+    const organizacao_id = post__data.organizacao_id;
+    const estrategia_id = post__data.estrategia_id;
 
     // Check if the data is empty.
     if(post__data == undefined){
@@ -136,7 +136,7 @@ app.post('/newEvent',(req,res)=>{
         return;
     }
 
-    conection.query("INSERT INTO Eventos (nome_evento , data_evento , localizacao_evento) VALUES (?,?,?,?,?)" ,[nome_evento , data_evento , localizacao_evento,organizacao_id,estrategia_id],(err,rows)=>{
+    conection.query("INSERT INTO Eventos (nome_evento , data_evento , localizacao_evento , organizacao_id , estrategia_id) VALUES (?,?,?,?,?)" ,[nome_evento , data_evento , localizacao_evento,organizacao_id,estrategia_id],(err,rows)=>{
         if(!err){
             res.json(funcoes.response('Succes!!','All data was entered successfully',rows.affectedRows,null));
         }else{
@@ -316,6 +316,7 @@ app.put('/estrategies/update/:id',(req,res)=>{
      
     //Update a especific data
     if(tipo_estrategia.length >0 || descricao.length > 0 || efetividade.length > 0 ){
+
         if(tipo_estrategia.length>0){
             conection.query("UPDATE Estrategias SET tipo_estrategia = ? WHERE id_estrategia = ? ",[tipo_estrategia,id],(err,rows)=>{
                 if(!err){
