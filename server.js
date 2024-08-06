@@ -247,8 +247,8 @@ app.put('/organizations/update/:id',(req,res)=>{
     const localizacao = update__data.localizacao;
     const responsavel = update__data.responsavel;
      
-    if(update__data === undefined){
-        res.status(404).json(funcoes.response('Error!','Empty data ',0,null));
+    if (!update__data || Object.keys(update__data).length === 0) {
+        res.status(404).json(funcoes.response('Error!', 'Empty data', 0, null));
         return;
     }
 
@@ -400,7 +400,7 @@ app.put('/events/update/:id',(req,res)=>{
             });
 
         }else if(data_evento){
-            conection.query("UPDATE Evento SET data_evento = ? WHERE id_evento = ? ",[descricao,id],(err,rows)=>{
+            conection.query("UPDATE Eventos SET data_evento = ? WHERE id_evento = ? ",[data_evento,id],(err,rows)=>{
                 if(!err){
                     if(rows.affectedRows>0){
                         res.json(funcoes.response('Sucess!','Data do evento da organizacação atualizada com sucesso!',rows.affectedRows,null));
