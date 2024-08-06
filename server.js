@@ -85,7 +85,7 @@ app.post('/newOrganization',(req,res)=>{
 
 
 // Registering strategies.
-app.post('/newEstrategie',(req,res)=>{
+app.post('/newStrategy',(req,res)=>{
     const post__data = req.body;
     const tipo_estrategia = post__data.tipo_estrategia;
     const descricao = post__data.descricao;
@@ -180,8 +180,8 @@ app.get('/organizations/:id',(req,res)=>{
 
 
 
-//Read all estrategies
-app.get('/estrategies',(req,res)=>{
+//Read all strategies
+app.get('/strategies',(req,res)=>{
     conection.query('SELECT * FROM Estrategias',(err,rows)=>{
         if(!err){
             res.json(funcoes.response('Succes!!','Successful data visualization',rows.length,rows));
@@ -192,14 +192,14 @@ app.get('/estrategies',(req,res)=>{
 });
 
 //Read a especific estrategy
-app.get('/estrategies/:id',(req,res)=>{
+app.get('/strategies/:id',(req,res)=>{
     const id = parseInt(req.params.id);
     conection.query('SELECT * FROM Estrategias WHERE id_estrategia = ?',[id],(err,rows)=>{
         if(!err){
             if(rows.length>0){
-                res.json(funcoes.response('Succes!!','Viewing an estrategie with specific id successful !',rows.length,rows));
+                res.json(funcoes.response('Succes!!','Viewing an strategy with specific id successful !',rows.length,rows));
             }else{
-                res.json(funcoes.response('ERROR!',"ERROR : This estrategie does not exist in the database",0,null));
+                res.json(funcoes.response('ERROR!',"ERROR : This strategy does not exist in the database",0,null));
             }
         }else{
             res.json(funcoes.response('Error!',`ERROR!:${err.message}`,0,null));
@@ -247,9 +247,14 @@ app.put('/organizations/update/:id',(req,res)=>{
     const localizacao = update__data.localizacao;
     const responsavel = update__data.responsavel;
      
+    if(update__data === undefined){
+        res.status(404).json(funcoes.response('Error!','Empty data ',0,null));
+        return;
+    }
+
     //Update a especific data
-    if(CNPJ.length >0 || nomeOrganizacao.length > 0 || localizacao.length > 0 || responsavel.length > 0 ){
-        if(CNPJ.length>0){
+    if(CNPJ || nomeOrganizacao|| localizacao|| responsavel ){
+        if(CNPJ){
             conection.query("UPDATE Organizacoes SET cnpj = ? WHERE id_organizacao = ? ",[CNPJ,id],(err,rows)=>{
                 if(!err){
                     if(rows.affectedRows>0){
@@ -262,7 +267,7 @@ app.put('/organizations/update/:id',(req,res)=>{
                 }
             });
 
-        }else if(nomeOrganizacao.length>0){
+        }else if(nomeOrganizacao){
             conection.query("UPDATE Organizacoes SET nome_organizacao = ? WHERE id_organizacao = ? ",[nomeOrganizacao,id],(err,rows)=>{
                 if(!err){
                     if(rows.affectedRows>0){
@@ -306,8 +311,12 @@ app.put('/organizations/update/:id',(req,res)=>{
 });
 
 
+
+
+
+
 //Update a especific estrategie
-app.put('/estrategies/update/:id',(req,res)=>{
+app.put('/strategies/update/:id',(req,res)=>{
     const id = req.params.id;
     const update__data = req.body;
     const tipo_estrategia = update__data.tipo_estrategia;
@@ -315,9 +324,9 @@ app.put('/estrategies/update/:id',(req,res)=>{
     const efetividade = update__data.efetividade;
      
     //Update a especific data
-    if(tipo_estrategia.length >0 || descricao.length > 0 || efetividade.length > 0 ){
+    if(tipo_estrategia || descricao|| efetividade ){
 
-        if(tipo_estrategia.length>0){
+        if(tipo_estrategia){
             conection.query("UPDATE Estrategias SET tipo_estrategia = ? WHERE id_estrategia = ? ",[tipo_estrategia,id],(err,rows)=>{
                 if(!err){
                     if(rows.affectedRows>0){
@@ -330,7 +339,7 @@ app.put('/estrategies/update/:id',(req,res)=>{
                 }
             });
 
-        }else if(descricao.length>0){
+        }else if(descricao){
             conection.query("UPDATE Estrategias SET descricao = ? WHERE id_estrategia = ? ",[descricao,id],(err,rows)=>{
                 if(!err){
                     if(rows.affectedRows>0){
@@ -343,7 +352,7 @@ app.put('/estrategies/update/:id',(req,res)=>{
                 }
             });
 
-        }else if(efetividade.length>0){
+        }else if(efetividade){
             conection.query("UPDATE Estrategias SET efetividade = ? WHERE id_estrategia = ? ",[efetividade,id],(err,rows)=>{
                 if(!err){
                     if(rows.affectedRows>0){
@@ -375,9 +384,9 @@ app.put('/events/update/:id',(req,res)=>{
 
      
     //Update a especific data
-    if(nome_evento.length > 0 || data_evento.length > 0 || localizacao_evento.length > 0 || organizacao_id.length > 0 || estrategia_id.length > 0){
+    if(nome_evento|| data_evento || localizacao_evento || organizacao_id || estrategia_id){
         
-        if(nome_evento.length > 0){
+        if(nome_evento){
             conection.query("UPDATE Eventos SET nome_evento = ? WHERE id_evento = ? ",[nome_evento,id],(err,rows)=>{
                 if(!err){
                     if(rows.affectedRows>0){
@@ -390,7 +399,7 @@ app.put('/events/update/:id',(req,res)=>{
                 }
             });
 
-        }else if(data_evento > 0){
+        }else if(data_evento){
             conection.query("UPDATE Evento SET data_evento = ? WHERE id_evento = ? ",[descricao,id],(err,rows)=>{
                 if(!err){
                     if(rows.affectedRows>0){
@@ -403,7 +412,7 @@ app.put('/events/update/:id',(req,res)=>{
                 }
             });
 
-        }else if(localizacao_evento.length>0){
+        }else if(localizacao_evento){
             conection.query("UPDATE Eventos SET localizacao_evento = ? WHERE id_evento = ? ",[efetividade,id],(err,rows)=>{
                 if(!err){
                     if(rows.affectedRows>0){
@@ -426,7 +435,7 @@ app.put('/events/update/:id',(req,res)=>{
 
 app.delete('/organizations/delete/:id',(req,res)=>{
     const id = req.params.id;
-    conection.query("DELETE * FROM Organizacoes WHERE id_organizacao = ?",[id],(err,rows)=>{
+    conection.query("DELETE  FROM Organizacoes WHERE id_organizacao = ?",[id],(err,rows)=>{
         if(!err){
             if(rows.affectedRows > 0){
                 res.json(funcoes.response('Sucess!','Organização deletada com sucesso!',rows.affectedRows,null));
@@ -440,9 +449,9 @@ app.delete('/organizations/delete/:id',(req,res)=>{
 })
 
 
-app.delete('/estrategies/delete/:id',(req,res)=>{
+app.delete('/strategies/delete/:id',(req,res)=>{
     const id = req.params.id;
-    conection.query("DELETE * FROM Estrategies WHERE id_estrategia = ?",[id],(err,rows)=>{
+    conection.query("DELETE  FROM Estrategias WHERE id_estrategia = ?",[id],(err,rows)=>{
         if(!err){
             if(rows.affectedRows > 0){
                 res.json(funcoes.response('Sucess!','Estratégia deletada com sucesso!',rows.affectedRows,null));
@@ -458,7 +467,7 @@ app.delete('/estrategies/delete/:id',(req,res)=>{
 
 app.delete('/events/delete/:id',(req,res)=>{
     const id = req.params.id;
-    conection.query("DELETE * FROM Eventos WHERE id_evento = ?",[id],(err,rows)=>{
+    conection.query("DELETE  FROM Eventos WHERE id_evento = ?",[id],(err,rows)=>{
         if(!err){
             if(rows.affectedRows > 0){
                 res.json(funcoes.response('Sucess!','Evento deletado com sucesso!',rows.affectedRows,null));
