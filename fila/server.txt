@@ -326,6 +326,11 @@ app.put('/strategies/update/:id',(req,res)=>{
     //Update a especific data
     if(tipo_estrategia || descricao|| efetividade ){
 
+        {
+            "tipo_estrategia":"asdsadsadsad",
+            "descricao":"",
+            "efetividade":"dfdfgdgdf"
+        }
         if(tipo_estrategia){
             conection.query("UPDATE Estrategias SET tipo_estrategia = ? WHERE id_estrategia = ? ",[tipo_estrategia,id],(err,rows)=>{
                 if(!err){
@@ -483,4 +488,110 @@ app.delete('/events/delete/:id',(req,res)=>{
 //Endpoints
 app.use((req,res)=>{
     res.json(funcoes.response('Warning','Route not found',0,null));
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const express = require('express');
+const app = express();
+const mysql = require('mysql');
+const bodyParser = require('body-parser');
+const funcoes = require('./funcoes'); // Assumindo que 'funcoes' está em um arquivo separado
+
+// Configurar o body-parser
+app.use(bodyParser.json());
+
+// Configurar a conexão com o banco de dados (ajuste conforme necessário)
+const connection = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: '',
+  database: 'seu_banco_de_dados'
+});
+
+connection.connect(err => {
+  if (err) throw err;
+  console.log('Conectado ao banco de dados!');
+});
+
+app.put('/atualizar/:id', (req, res) => {
+  const id = req.params.id;
+  const update_data = req.body;
+
+  if (!update_data || Object.keys(update_data).length === 0) {
+    res.status(404).json(funcoes.response('Error!', 'Empty data', 0, null));
+    return;
+  }
+
+  // Construir dinamicamente a query SQL
+  let fields = [];
+  let values = [];
+
+  if (update_data.cnpj) {
+    fields.push('cnpj = ?');
+    values.push(update_data.cnpj);
+  }
+  if (update_data.nome_organizacao) {
+    fields.push('nome_organizacao = ?');
+    values.push(update_data.nome_organizacao);
+  }
+  if (update_data.localizacao) {
+    fields.push('localizacao = ?');
+    values.push(update_data.localizacao);
+  }
+  if (update_data.responsavel) {
+    fields.push('responsavel = ?');
+    values.push(update_data.responsavel);
+  }
+
+  // Adicionar o ID no array de valores
+  values.push(id);
+
+  if (fields.length > 0) {
+    const query = `UPDATE Organizacoes SET ${fields.join(', ')} WHERE id_organizacao = ?`;
+
+    connection.query(query, values, (err, result) => {
+      if (err) {
+        res.json(funcoes.response('ERROR!', `Erro: ${err.message}`, 0, null));
+        return;
+      }
+
+      if (result.affectedRows > 0) {
+        res.json(funcoes.response('Sucesso!', 'Dados atualizados com sucesso!', result.affectedRows, null));
+      } else {
+        res.json(funcoes.response('Error!', 'Não foi possível atualizar os dados, pois o ID não consta no banco de dados', result.affectedRows, null));
+      }
+    });
+  } else {
+    res.status(404).json(funcoes.response('Error!', 'Nenhum campo válido para atualizar', 0, null));
+  }
+});
+
+// Iniciar o servidor
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Servidor rodando na porta ${PORT}`);
 });

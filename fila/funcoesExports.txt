@@ -1,0 +1,18 @@
+module.exports={
+    host:'localhost',
+    user:'root',
+    password:'',
+    database:'plataforma_eventos'
+}
+
+function response(sts,msg,aftrows,data=null){
+    return{
+        Status:sts,
+        Message:msg,
+        Affected__rows:aftrows,
+        data:data,
+        timestap:new Date().getTime()
+    }
+}
+
+module.exports = {response};

@@ -1,0 +1,55 @@
+DEBUG DA ATIVIDADE FAP 2024 
+Descrição do Cenário:
+Implementação de programas de reciclagem em diversas comunidades urbanas, com o objetivo de reduzir o desperdício e promover práticas sustentáveis.
+ Cada comunidade participante é envolvida em iniciativas gerenciadas por organizações locais.
+ Cada Organização de Gestão de Eventos 
+(Descrição: Representa a entidade responsável pela organização de eventos.)
+ Atributos: Nome, Localização, Responsável). 
+
+Os Eventos (Descrição: Representa os eventos individuais organizados pelas Organizações de Gestão de Eventos. 
+Atributos: Nome, Data, Localização.
+
+Relacionamento: Muitos Eventos pertencem a uma Organização de Gestão de Eventos.)).
+ As Estratégias de Gestão de Resíduos 
+(Descrição: Estratégias implementadas para gerenciar os resíduos durante os eventos. 
+Atributos: 
+Tipo de Estratégia (reciclagem, compostagem, redução de desperdício, etc.), Descrição, Efetividade.
+
+CONCLUSÃO : 
+Criar um sistema de marcação de eventos de reciclagem onde cada empresa será agregada a um 
+evento em específico e terá uma estratégia específica para cada empresa.
+
+
+
+
+
+Modelo entidade e relacionamento (MER)
+Entidades
+Organizacoes
+•	Id_organizacao(PK)
+•	CNPJ
+•	nome_organizacao
+•	localização
+•	responsável
+Eventos
+•	Id_evento(PK)
+•	nome_evento
+•	data_evento
+•	localizacao_evento
+•	organizacao_id (FK)
+•	estrategia_id (FK)
+Estrategias
+•	id_estrategia (PK)
+•	tipo_estrategia
+•	descricao
+•	efetividade
+Relacionamentos
+  - Organização e eventos (1:N).
+•	Uma organização pode criar vários eventos(1:N).
+•	Vários eventos são criados por apenas uma organização(N:1).
+- Eventos e estratégias
+•	Um evento contém várias estratégias(1:N).
+•	Várias estratégias estão contidas em um evento(N:1).
+
+
+
