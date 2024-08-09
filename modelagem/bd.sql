@@ -1,12 +1,12 @@
 create database plataforma_eventos;
--- drop database plataforma_eventos;
+ -- drop database plataforma_eventos;
 use plataforma_eventos;
 
 create table Organizacoes(
 	id_organizacao int PRIMARY KEY not null AUTO_INCREMENT,
 	cnpj char(21),
 	nome_organizacao varchar(200),
-	localizacao text,
+	localizacao_organizacao text,
 	responsavel varchar(200)
 );
 
